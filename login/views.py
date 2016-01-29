@@ -4,3 +4,9 @@ from django.http import HttpResponse
 # Create your views here.
 def register(request):
     return HttpResponse("Hello world")
+
+# login
+
+# comments
+
+# add comments
