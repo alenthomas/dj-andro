@@ -11,30 +11,54 @@ from .models import Users
 
 
 def register(request):
+    """
+    Registers new user via a form field in post
+    request and renders the registration form in
+    a get request
+    """
+    data = {}
     if request.method == "POST":
         new_user = RegisterForm(request.POST)
         if new_user.is_valid():
             new_user.save()
-            return HttpResponseRedirect('/app/success/')
+            data['success']=1
+            data['message'] ="username successfully added"
+            return JsonResponse(data)
+            #return HttpResponseRedirect('/app/success/')
         else:
-            return HttpResponseRedirect('/app/error/')
+            data['success']=0
+            data['message']="username registration error"
+            return JsonResponse(data)
+            #return HttpResponseRedirect('/app/error/')
     else:
-        form = RegisterForm()
+        new_user = RegisterForm()
     return render(request, 'login/register.html',
-                  {'form':form,})
+                  {'form':new_user,})
 
 # login
 def login(request):
+    """
+    Checks if a valid username and password in post 
+    and renders the login form in get request
+    """
+    data = {}
     if request.method == "POST":
         form = LoginForm(request.POST)
         if form.is_valid():
             uname = form.cleaned_data.get('username')
             password = form.cleaned_data.get('password')
-            u_obj = Users.objects.filter(username=uname, password=password)
+            u_obj = Users.objects.filter(username=uname,
+                                         password=password)
             if u_obj:
-                return HttpResponseRedirect('/app/successlogin/')
+                data['success']=1
+                data['message']='login successful'
+                return JsonResponse(data)
+                #return HttpResponseRedirect('/app/successlogin/')
             else:
-                return HttpResponseRedirect('/app/errorlogin/')
+                data['success']=0
+                data['message']='login error'
+                return JsonResponse(data)
+                #return HttpResponseRedirect('/app/errorlogin/')
     else:
         form = LoginForm()
     return render(request, 'login/login.html',
