@@ -1,13 +1,14 @@
 from django.shortcuts import render
-from django.http import HttpResponse, HttpResponseRedirect,
+from django.http import HttpResponse, HttpResponseRedirect
 from django.http import JsonResponse
 from django.core.urlresolvers import reverse
+from django.views.decorators.csrf import csrf_exempt
 
 from .forms import RegisterForm, LoginForm, CommentForm
-
 from .models import Users, Comments
 
 
+@csrf_exempt
 def register(request):
     """
     Registers new user via a form field in post
@@ -31,6 +32,7 @@ def register(request):
     return render(request, 'login/register.html',
                   {'form':new_user,})
 
+@csrf_exempt
 def login(request):
     """
     Checks if a valid username and password in post 
@@ -56,7 +58,7 @@ def login(request):
         form = LoginForm()
     return render(request, 'login/login.html',
                       {'form':form,})
-
+@csrf_exempt
 def comment(request):
     """
     adds a comment using a post form to db and on get
@@ -79,7 +81,7 @@ def comment(request):
         comment = CommentForm()
     return render(request, 'login/addcomment.html',
                   {'form':comment})
-
+@csrf_exempt
 def display(request):
     """
     Returns the entire comments model fields in Json
