@@ -36,10 +36,10 @@ facilitate the android django post interface
 $ virtualenv -p python3.4 env
 $ source env/bin/activate
 $ pip install Django==1.9.1
-$ cd androidlogin/  (project root where the manage.py exists)
+$ cd dj-android/                 (project root where the manage.py exists)
 $ ./manage.py migrate
 $ ./manage.py makemigrations login
 $ ./manage.py migrate login
-$ ./manage.py createsuperuser ( grants acces to django admin )
+$ ./manage.py createsuperuser    ( grants acces to django admin )
 $ ./manage.py runserver
-```sh
+```
