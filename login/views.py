@@ -6,7 +6,7 @@ from django.http import JsonResponse
 
 from .forms import RegisterForm
 from .forms import LoginForm
-from .forms import AddCommentForm
+from .forms import CommentForm
 
 from .models import Users
 from .models import Comments
@@ -66,14 +66,14 @@ def login(request):
     return render(request, 'login/login.html',
                       {'form':form,})
 # add comments
-def addcomment(request):
+def comment(request):
     """
     adds a comment using a post form to db and on get
     renders a comment form
     """
     data = {}
     if request.method == "POST":
-        comment = AddCommentForm(request.POST)
+        comment = CommentForm(request.POST)
         if comment.is_valid():
             comment.save()
             data['success']=1
@@ -85,11 +85,30 @@ def addcomment(request):
             return JsonResponse(data)
         
     else:
-        comment = AddCommentForm()
+        comment = CommentForm()
     return render(request, 'login/addcomment.html',
                   {'form':comment})
 #comments
-
+def display(request):
+    data = {}
+    comments = Comments.objects.all()
+    if comments:
+        data['success']=1
+        data['message']="Comments available"
+        data['comments']=[]
+        for i in range(len(comments)):
+            data['comments'].append(
+                {'username':comments[i].username.username,
+                 'comment_id':comments[i].id,
+                 'title':comments[i].title,
+                 'message':comments[i].message,
+                 })
+        return JsonResponse(data)
+    else:
+        data['success']=0
+        data['message']='no comments available'
+        return JsonResponse(data)
+        
 # def success(request):
 #     data = {}
 #     data['success']=1
