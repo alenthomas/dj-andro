@@ -1,9 +1,6 @@
-# Test Project to check Android Django Interface
-
-Simple app to test android django json connection
+# Simple app to test android django json connection
 
 ### Database has tables
-
 1. Login table with fields
    * email_id : with validation similar to "abc@example.com"
    * password : character field
@@ -16,7 +13,6 @@ Simple app to test android django json connection
    * id    : integer field (django default)
 
 ### URL Schemes include
-
     * /register : to register new user
     * /login    : login with existing user (email_id & password)
     * /about    : input comment/about 
