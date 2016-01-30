@@ -1,22 +1,22 @@
 from django import forms
-from .models import Users, Comments
+from .models import Login, About
 
 class RegisterForm(forms.ModelForm):
     class Meta:
-        model = Users
-        fields = {'username', 'password'}
+        model = Login
+        fields = {'email_id', 'password', 'mobile_number', 'hint'}
 
 class LoginForm(forms.Form):
-    username = forms.CharField(max_length=10)
-    password = forms.CharField(max_length=10)
+    email_id = forms.CharField(max_length=40)
+    password = forms.CharField(max_length=35)
 
-class CommentForm(forms.ModelForm):
+class AboutForm(forms.ModelForm):
     class Meta:
-        model = Comments
-        fields = {'username', 'title', 'message'}
-        """
-        reorder the form fields in the model form
-        """
-    def __init__(self, *args, **kwargs):
-        super(CommentForm, self).__init__(*args, **kwargs)
-        self.fields.keyOrder = ['username', 'title', 'message']
+        model = About
+        fields = {'about'}
+        # """
+        # reorder the form fields in the model form
+        # """
+    # def __init__(self, *args, **kwargs):
+    #     super(CommentForam, self).__init__(*args, **kwargs)
+    #     self.fields.keyOrder = ['username', 'title', 'message']

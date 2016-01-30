@@ -1,7 +1,7 @@
 from django.contrib import admin
 
-from .models import Users
-from .models import Comments
+from .models import Login
+from .models import About
 
-admin.site.register(Users)
-admin.site.register(Comments)
+admin.site.register(Login)
+admin.site.register(About)

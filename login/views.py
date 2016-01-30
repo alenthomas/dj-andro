@@ -4,8 +4,8 @@ from django.http import JsonResponse
 from django.core.urlresolvers import reverse
 from django.views.decorators.csrf import csrf_exempt
 
-from .forms import RegisterForm, LoginForm, CommentForm
-from .models import Users, Comments
+from .forms import RegisterForm, LoginForm, AboutForm
+from .models import Login, About
 
 
 @csrf_exempt
@@ -42,9 +42,9 @@ def login(request):
     if request.method == "POST":
         form = LoginForm(request.POST)
         if form.is_valid():
-            uname = form.cleaned_data.get('username')
+            email = form.cleaned_data.get('email_id')
             password = form.cleaned_data.get('password')
-            u_obj = Users.objects.filter(username=uname,
+            u_obj = Login.objects.filter(email_id=email,
                                          password=password)
             if u_obj:
                 data['success']=1
@@ -59,16 +59,16 @@ def login(request):
     return render(request, 'login/login.html',
                       {'form':form,})
 @csrf_exempt
-def comment(request):
+def about(request):
     """
     adds a comment using a post form to db and on get
     renders a comment form
     """
     data = {}
     if request.method == "POST":
-        comment = CommentForm(request.POST)
-        if comment.is_valid():
-            comment.save()
+        about = AboutForm(request.POST)
+        if about.is_valid():
+            about.save()
             data['success']=1
             data['message']='Comment successfully added'
             return JsonResponse(data)
@@ -78,29 +78,27 @@ def comment(request):
             return JsonResponse(data)
         
     else:
-        comment = CommentForm()
+        about = AboutForm()
     return render(request, 'login/addcomment.html',
-                  {'form':comment})
+                  {'form':about})
 @csrf_exempt
 def display(request):
     """
     Returns the entire comments model fields in Json
     """
     data = {}
-    comments = Comments.objects.all()
-    if comments:
+    about = About.objects.all()
+    if about:
         data['success']=1
         data['message']="Comments available"
-        data['comments']=[]
-        for i in range(len(comments)):
-            data['comments'].append(
-                {'username':comments[i].username.username,
-                 'comment_id':comments[i].id,
-                 'title':comments[i].title,
-                 'message':comments[i].message,
-                 })
+        data['about']=[]
+        for i in range(len(about)):
+            data['about'].append(
+                {'about':about[i].about,
+                 'about_id':about[i].id,
+             })
         return JsonResponse(data)
     else:
         data['success']=0
-        data['message']='no comments available'
+        data['message']='no about available'
         return JsonResponse(data)
