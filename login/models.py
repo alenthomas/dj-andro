@@ -1,11 +1,13 @@
 from django.db import models
 
-class Users(models.Model):
-    username = models.CharField(max_length=10, unique=True)
-    password = models.CharField(max_length=10)
+class Login(models.Model):
+    email_id = models.EmailId(max_length=40)
+    password = models.CharField(max_length=35)
+    mobile_number = models.CharField(max_length=13)
+    hint = models.CharField(max_length=40)
 
     def __str__(self):
-        return self.username
+        return self.email_id
 
 class Comments(models.Model):
     username = models.ForeignKey(Users)
