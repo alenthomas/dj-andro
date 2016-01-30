@@ -10,7 +10,7 @@ class LoginForm(forms.Form):
     username = forms.CharField(max_length=10)
     password = forms.CharField(max_length=10)
 
-class AddCommentForm(forms.ModelForm):
+class CommentForm(forms.ModelForm):
     class Meta:
         model = Comments
         fields = {'username', 'title', 'message'}
@@ -18,5 +18,5 @@ class AddCommentForm(forms.ModelForm):
         reorder the form fields in the model form
         """
     def __init__(self, *args, **kwargs):
-        super(AddCommentForm, self).__init__(*args, **kwargs)
+        super(CommentForm, self).__init__(*args, **kwargs)
         self.fields.keyOrder = ['username', 'title', 'message']

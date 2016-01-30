@@ -1,15 +1,11 @@
 from django.shortcuts import render
-from django.http import HttpResponse
-from django.http import HttpResponseRedirect
-from django.core.urlresolvers import reverse
+from django.http import HttpResponse, HttpResponseRedirect,
 from django.http import JsonResponse
+from django.core.urlresolvers import reverse
 
-from .forms import RegisterForm
-from .forms import LoginForm
-from .forms import CommentForm
+from .forms import RegisterForm, LoginForm, CommentForm
 
-from .models import Users
-from .models import Comments
+from .models import Users, Comments
 
 
 def register(request):
@@ -26,18 +22,15 @@ def register(request):
             data['success']=1
             data['message'] ="username successfully added"
             return JsonResponse(data)
-            #return HttpResponseRedirect('/app/success/')
         else:
             data['success']=0
             data['message']="username registration error"
             return JsonResponse(data)
-            #return HttpResponseRedirect('/app/error/')
     else:
         new_user = RegisterForm()
     return render(request, 'login/register.html',
                   {'form':new_user,})
 
-# login
 def login(request):
     """
     Checks if a valid username and password in post 
@@ -55,17 +48,15 @@ def login(request):
                 data['success']=1
                 data['message']='login successful'
                 return JsonResponse(data)
-                #return HttpResponseRedirect('/app/successlogin/')
             else:
                 data['success']=0
                 data['message']='login error'
                 return JsonResponse(data)
-                #return HttpResponseRedirect('/app/errorlogin/')
     else:
         form = LoginForm()
     return render(request, 'login/login.html',
                       {'form':form,})
-# add comments
+
 def comment(request):
     """
     adds a comment using a post form to db and on get
@@ -88,8 +79,11 @@ def comment(request):
         comment = CommentForm()
     return render(request, 'login/addcomment.html',
                   {'form':comment})
-#comments
+
 def display(request):
+    """
+    Returns the entire comments model fields in Json
+    """
     data = {}
     comments = Comments.objects.all()
     if comments:
@@ -108,41 +102,3 @@ def display(request):
         data['success']=0
         data['message']='no comments available'
         return JsonResponse(data)
-        
-# def success(request):
-#     data = {}
-#     data['success']=1
-#     data['message'] ="username successfully added"
-#     return JsonResponse(data)
-
-# def error(request):
-#     data = {}
-#     data['success']=0
-#     data['message']="username registration error"
-#     return JsonResponse(data)
-
-# def login_success(request):
-#     data = {}
-#     data['success']=1
-#     data['message'] ="login successfull"
-#     return JsonResponse(data)
-
-# def login_error(request):
-#     data = {}
-#     data['success']=0
-#     data['message']="login error"
-#     return JsonResponse(data)
-
-
-# def status(request, no):
-#     no = int(no)
-#     data = {}
-#     if no == 1:
-#         data['success']=1
-#         data['message'] ="username successfully added"
-#     elif no == 0:
-#         data['success']=0
-#         data['message'] ="username registration error"
-#     else:
-#         data = {'error':'unknown'}
-#     return JsonResponse(data)
