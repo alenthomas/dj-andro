@@ -6,8 +6,10 @@ from django.http import JsonResponse
 
 from .forms import RegisterForm
 from .forms import LoginForm
+from .forms import AddCommentForm
 
 from .models import Users
+from .models import Comments
 
 
 def register(request):
@@ -63,33 +65,54 @@ def login(request):
         form = LoginForm()
     return render(request, 'login/login.html',
                       {'form':form,})
-# comments
-
 # add comments
-
-def success(request):
+def addcomment(request):
+    """
+    adds a comment using a post form to db and on get
+    renders a comment form
+    """
     data = {}
-    data['success']=1
-    data['message'] ="username successfully added"
-    return JsonResponse(data)
+    if request.method == "POST":
+        comment = AddCommentForm(request.POST)
+        if comment.is_valid():
+            comment.save()
+            data['success']=1
+            data['message']='Comment successfully added'
+            return JsonResponse(data)
+        else:
+            data['success']=0
+            data['message']='Error while adding comment'
+            return JsonResponse(data)
+        
+    else:
+        comment = AddCommentForm()
+    return render(request, 'login/addcomment.html',
+                  {'form':comment})
+#comments
 
-def error(request):
-    data = {}
-    data['success']=0
-    data['message']="username registration error"
-    return JsonResponse(data)
+# def success(request):
+#     data = {}
+#     data['success']=1
+#     data['message'] ="username successfully added"
+#     return JsonResponse(data)
 
-def login_success(request):
-    data = {}
-    data['success']=1
-    data['message'] ="login successfull"
-    return JsonResponse(data)
+# def error(request):
+#     data = {}
+#     data['success']=0
+#     data['message']="username registration error"
+#     return JsonResponse(data)
 
-def login_error(request):
-    data = {}
-    data['success']=0
-    data['message']="login error"
-    return JsonResponse(data)
+# def login_success(request):
+#     data = {}
+#     data['success']=1
+#     data['message'] ="login successfull"
+#     return JsonResponse(data)
+
+# def login_error(request):
+#     data = {}
+#     data['success']=0
+#     data['message']="login error"
+#     return JsonResponse(data)
 
 
 # def status(request, no):
