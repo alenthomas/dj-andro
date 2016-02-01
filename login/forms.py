@@ -7,7 +7,7 @@ class RegisterForm(forms.ModelForm):
         fields = {'email_id', 'password', 'mobile_number', 'hint'}
 
 class LoginForm(forms.Form):
-    email_id = forms.CharField(max_length=40)
+    mob_no = forms.CharField(max_length=40)
     password = forms.CharField(max_length=35)
 
 class AboutForm(forms.ModelForm):

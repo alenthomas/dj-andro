@@ -42,9 +42,9 @@ def login(request):
     if request.method == "POST":
         form = LoginForm(request.POST)
         if form.is_valid():
-            email = form.cleaned_data.get('email_id')
+            mob_no = form.cleaned_data.get('mob_no')
             password = form.cleaned_data.get('password')
-            u_obj = Login.objects.filter(email_id=email,
+            u_obj = Login.objects.filter(mobile_number=mob_no,
                                          password=password)
             if u_obj:
                 data['success']=1
