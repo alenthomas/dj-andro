@@ -15,3 +15,17 @@ class About(models.Model):
 
     def __str__(self):
         return str(self.id)
+
+class Team(models.Model):
+    team = models.CharField(max_length=40, unique=True)
+    short_name = models.CharField(max_length=5, unique=True)
+
+    def __str__(self):
+        return self.short_name
+
+class Score(models.Model):
+    team = models.ForeignKey(Team)
+    score = models.PositiveIntegerField(default=0)
+
+    def __str__(self):
+        return self.team.short_name
