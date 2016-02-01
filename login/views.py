@@ -5,7 +5,7 @@ from django.core.urlresolvers import reverse
 from django.views.decorators.csrf import csrf_exempt
 
 from .forms import RegisterForm, LoginForm, AboutForm
-from .models import Login, About
+from .models import Login, About, Team, Score
 
 
 @csrf_exempt
@@ -102,3 +102,23 @@ def display(request):
         data['success']=0
         data['message']='no about available'
         return JsonResponse(data)
+
+def score(request):
+    """
+    Return the team names and scores
+    """
+    # if request.method == POST:
+    #     form = ScoreForm(request.POST)
+    #     if form.is_valid():
+    #         team1=form.cleaned_data.get('team1')
+    #         team2=form.cleaned_data.get('team2')
+    team1 = Team.objects.filter(short_name='brz')
+    team2 = Team.objects.filter(short_name='ind')
+    score1 = Score.objects.filter(team__short_name='brz')
+    score2 = Score.objects.filter(team__short_name='ind')
+    return render(request, 'login/score.html',{
+        't1':team1[0],
+        't2':team2[0],
+        's1':score1[0],
+        's2':score2[0],
+        })
