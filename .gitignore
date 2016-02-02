@@ -3,4 +3,5 @@
 *migrations*
 *__py*
 db.sqlite3
-*.cache*.coverage
+*.cache*
+.coverage
