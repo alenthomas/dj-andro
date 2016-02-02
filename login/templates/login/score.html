@@ -1,6 +1,7 @@
 <html>
 	<h1> Score </h1>
-	Team 1 : {{ t1.short_name}} {{ s1.score }} vs {{ s2.score }} {{ t2.short_name}} :Team2 
-	<p>
-
-		
+	<form action="" method="post"> {% csrf_token %}
+		{{ form.as_p }}
+		<input type="submit" value="Update Score" />
+	</form>
+</html>
