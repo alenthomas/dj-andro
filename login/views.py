@@ -112,13 +112,45 @@ def score(request):
     #     if form.is_valid():
     #         team1=form.cleaned_data.get('team1')
     #         team2=form.cleaned_data.get('team2')
-    team1 = Team.objects.filter(short_name='brz')
-    team2 = Team.objects.filter(short_name='ind')
-    score1 = Score.objects.filter(team__short_name='brz')
-    score2 = Score.objects.filter(team__short_name='ind')
+    team1 = Team.objects.filter(team_id='team1')
+    team2 = Team.objects.filter(team_id='team2')
+    score1 = Score.objects.filter(team__team_id='team1')
+    score2 = Score.objects.filter(team__team_id='team2')
     return render(request, 'login/score.html',{
         't1':team1[0],
         't2':team2[0],
         's1':score1[0],
         's2':score2[0],
         })
+
+def scorejson(request):
+    """
+    Return the team names and scores
+    """
+    team1 = Team.objects.filter(team_id='team1')
+    team2 = Team.objects.filter(team_id='team2')
+    score1 = Score.objects.filter(team__team_id='team1')
+    score2 = Score.objects.filter(team__team_id='team2')
+    data = {}
+    score = Score.objects.all()
+    if score:
+        data['success']=1
+        data['message']="Current Score Available"
+        data['score'] = []
+        for i in range(len(score)):
+            data['score'].append(
+                {'score':score[i].score,
+                 'team_name':score[i].team.team,
+                 'team_id':score[i].team.team_id,
+                 })
+        return JsonResponse(data)
+    else:
+        data['success']=0
+        data['message']='no score available'
+        return JsonResponse(data)
+    # return render(request, 'login/score.html',{
+    #     't1':team1[0],
+    #     't2':team2[0],
+    #     's1':score1[0],
+    #     's2':score2[0],
+    #     })
