@@ -4,7 +4,7 @@ from django.http import JsonResponse
 from django.core.urlresolvers import reverse
 from django.views.decorators.csrf import csrf_exempt
 
-from .forms import RegisterForm, LoginForm, AboutForm
+from .forms import RegisterForm, LoginForm, AboutForm, ScoreForm
 from .models import Login, About, Team, Score
 
 
@@ -81,7 +81,7 @@ def about(request):
         about = AboutForm()
     return render(request, 'login/addcomment.html',
                   {'form':about})
-@csrf_exempt
+
 def display(request):
     """
     Returns the entire comments model fields in Json
@@ -103,29 +103,41 @@ def display(request):
         data['message']='no about available'
         return JsonResponse(data)
 
+@csrf_exempt
 def score(request):
     """
     Return the team names and scores
     """
-    # if request.method == POST:
-    #     form = ScoreForm(request.POST)
-    #     if form.is_valid():
-    #         team1=form.cleaned_data.get('team1')
-    #         team2=form.cleaned_data.get('team2')
-    team1 = Team.objects.filter(team_id='team1')
-    team2 = Team.objects.filter(team_id='team2')
-    score1 = Score.objects.filter(team__team_id='team1')
-    score2 = Score.objects.filter(team__team_id='team2')
-    return render(request, 'login/score.html',{
-        't1':team1[0],
-        't2':team2[0],
-        's1':score1[0],
-        's2':score2[0],
-        })
-
+    data = {}
+    if request.method == "POST":
+        form = ScoreForm(request.POST)
+        if form.is_valid():
+            team1score = form.cleaned_data.get('team1score')
+            team2score = form.cleaned_data.get('team2score')
+            
+            score1 = Score.objects.filter(team__team_id='team1')[0]
+            score1.score = team1score
+            score1.save()
+            
+            score2 = Score.objects.filter(team__team_id='team2')[0]
+            score2.score = team2score
+            score2.save()
+            data['success']=1
+            data['message']='Score Updated Successfully'
+            return JsonResponse(data)
+        else:
+            data['success']=0
+            data['message']='Error while updating Score'
+            return JsonResponse(data)
+    else:
+        form = ScoreForm()
+    return render(request, 'login/score.html',
+                  { 'form':form})
+            
 def scorejson(request):
     """
-    Return the team names and scores
+    Return the team names and scores of the current 
+    teams playing with their respective scores
     """
     team1 = Team.objects.filter(team_id='team1')
     team2 = Team.objects.filter(team_id='team2')
@@ -148,9 +160,3 @@ def scorejson(request):
         data['success']=0
         data['message']='no score available'
         return JsonResponse(data)
-    # return render(request, 'login/score.html',{
-    #     't1':team1[0],
-    #     't2':team2[0],
-    #     's1':score1[0],
-    #     's2':score2[0],
-    #     })
