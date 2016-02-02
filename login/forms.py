@@ -20,3 +20,7 @@ class AboutForm(forms.ModelForm):
     # def __init__(self, *args, **kwargs):
     #     super(CommentForam, self).__init__(*args, **kwargs)
     #     self.fields.keyOrder = ['username', 'title', 'message']
+
+class ScoreForm(forms.Form):
+    team1score = forms.IntegerField()
+    team2score = forms.IntegerField()
