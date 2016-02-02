@@ -19,13 +19,14 @@ class About(models.Model):
 class Team(models.Model):
     team = models.CharField(max_length=40, unique=True)
     short_name = models.CharField(max_length=5, unique=True)
+    team_id = models.CharField(max_length=5, unique=True)
 
     def __str__(self):
-        return self.short_name
+        return self.team_id
 
 class Score(models.Model):
     team = models.ForeignKey(Team)
     score = models.PositiveIntegerField(default=0)
 
     def __str__(self):
-        return self.team.short_name
+        return self.team.team_id + " : " + self.team.short_name
